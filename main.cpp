@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "packet.h"
 
-#define DEBUG
+#define _DEBUG
 
 void usage() {
   printf("syntax: pcap_test <interface>\n");
@@ -33,21 +33,29 @@ int main(int argc, char* argv[]) {
     if (res == 0) continue;
     if (res == -1 || res == -2) break;
     Packet pk = Packet(packet);
+
+    // Print Ethernet Header Information
     printf("========== Ethernet ==========\n");
     printf("SRC MAC: ");
     pk.printMACAddr(Flags::SRC);
     printf("DES MAC: ");
     pk.printMACAddr(Flags::DES);
+
+    // If the packet has IP header
     if(pk.isHasIP()){
         printf("============= IP =============\n");
         printf("SRC IP: ");
         pk.printIPAddr(Flags::SRC);
         printf("DES IP: ");
         pk.printIPAddr(Flags::DES);
+
+        // If the packet has TCP header
         if(pk.isHasTCP()){
             printf("============= TCP ============\n");
             const u_char* data = pk.getTCPData();
             printf("TCP Data: \n");
+
+            // Print TCP data upto 10 Bytes.
             for(uint8_t i = 0; i < 10; i++){
                 if(pk.getSizeOfTCPData() <= i){
                     break;

@@ -5,16 +5,19 @@ Packet::Packet(const u_char* packet){
     this->etherHdr = (struct ether_header *) packet;
     setEtherType();
     setIPProtocolID();
-    if(isHasIP())   this->ipHdr = (struct iphdr *)(packet + 14);
+    if(isHasIP())
+        this->ipHdr = (struct iphdr *)(packet + 14);
     if(isHasTCP())
         this->tcpHdr = (struct tcphdr *)(packet + 14 + ipHdr->ihl*4);
 }
+
 void Packet::setEtherType(){
     if(ntohs(etherHdr->ether_type) == Flags::IP)
         this->etherType = Flags::IP;
     else
         this->etherType = Flags::NONE;
 }
+
 enum Flags Packet::getEtherType(){
     if(isHasIP()) return this->etherType;
     else return Flags::NONE;
@@ -24,6 +27,7 @@ void Packet::setIPProtocolID(){
     if(ipHdr->protocol == Flags::TCP)
         this->ipProtocolID = Flags::TCP;
 }
+
 enum Flags Packet::getIPProtocolID(){
     if(isHasTCP())  return this->ipProtocolID;
     else return Flags::NONE;
