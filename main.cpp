@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "packet.h"
 
-#define _DEBUG
+#define DEBUG
 
 void usage() {
   printf("syntax: pcap_test <interface>\n");
@@ -52,7 +52,8 @@ int main(int argc, char* argv[]) {
         // If the packet has TCP header
         if(pk.isHasTCP()){
             printf("============= TCP ============\n");
-            const u_char* data = pk.getTCPData();
+            printf("SRC Port: %d\nDES Port: %d\n",
+                   pk.getTCPPort(Flags::SRC), pk.getTCPPort(Flags::DES));
             printf("TCP Data: \n");
 
             // Print TCP data upto 10 Bytes.

@@ -30,6 +30,7 @@ public:
     void printIPAddr(enum Flags type);
     const u_char* getTCPData();
     int getSizeOfTCPData();
+    u_int16_t getTCPPort(enum Flags type);
 
 private:
     const u_char* data;

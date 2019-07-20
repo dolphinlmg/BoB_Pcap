@@ -4,9 +4,10 @@ Packet::Packet(const u_char* packet){
     this->data = packet;
     this->etherHdr = (struct ether_header *) packet;
     setEtherType();
-    setIPProtocolID();
-    if(isHasIP())
+    if(isHasIP()){
         this->ipHdr = (struct iphdr *)(packet + 14);
+        setIPProtocolID();
+    }
     if(isHasTCP())
         this->tcpHdr = (struct tcphdr *)(packet + 14 + ipHdr->ihl*4);
 }
@@ -24,7 +25,7 @@ enum Flags Packet::getEtherType(){
 }
 
 void Packet::setIPProtocolID(){
-    if(ipHdr->protocol == Flags::TCP)
+    if(this->ipHdr->protocol == Flags::TCP)
         this->ipProtocolID = Flags::TCP;
 }
 
@@ -45,9 +46,9 @@ bool Packet::isHasTCP(){
 
 const u_char* Packet::getMACAddr(enum Flags type){
     if(type == Flags::SRC){
-        return etherHdr->ether_shost;
+        return this->etherHdr->ether_shost;
     }else if(type == Flags::DES){
-        return etherHdr->ether_dhost;
+        return this->etherHdr->ether_dhost;
     }else{
         return nullptr;
     }
@@ -87,4 +88,13 @@ const u_char* Packet::getTCPData(){
 
 int Packet::getSizeOfTCPData(){
     return this->ipHdr->tot_len - this->ipHdr->ihl*4 - this->tcpHdr->th_off*4;
+}
+
+u_int16_t Packet::getTCPPort(enum Flags type){
+    if(type == Flags::SRC){
+        return ntohs(this->tcpHdr->th_sport);
+    }else if (type == Flags::DES){
+        return ntohs(this->tcpHdr->th_dport);
+    }else
+        return 0;
 }
