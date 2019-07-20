@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "packet.h"
 
-#define DEBUG
+#define _DEBUG
 
 void usage() {
   printf("syntax: pcap_test <interface>\n");
