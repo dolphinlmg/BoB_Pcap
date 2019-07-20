@@ -29,8 +29,8 @@ public:
     const u_char* getIPAddr(enum Flags type);
     void printIPAddr(enum Flags type);
     const u_char* getTCPData();
-    int getSizeOfTCPData();
-    u_int16_t getTCPPort(enum Flags type);
+    uint16_t getSizeOfTCPData();
+    uint16_t getTCPPort(enum Flags type);
 
 private:
     const u_char* data;

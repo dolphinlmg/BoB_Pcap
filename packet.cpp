@@ -86,11 +86,11 @@ const u_char* Packet::getTCPData(){
     return data + 14 + (ipHdr->ihl*4) + (tcpHdr->th_off*4);
 }
 
-int Packet::getSizeOfTCPData(){
-    return this->ipHdr->tot_len - this->ipHdr->ihl*4 - this->tcpHdr->th_off*4;
+uint16_t Packet::getSizeOfTCPData(){
+    return ntohs(this->ipHdr->tot_len) - this->ipHdr->ihl*4 - this->tcpHdr->th_off*4;
 }
 
-u_int16_t Packet::getTCPPort(enum Flags type){
+uint16_t Packet::getTCPPort(enum Flags type){
     if(type == Flags::SRC){
         return ntohs(this->tcpHdr->th_sport);
     }else if (type == Flags::DES){

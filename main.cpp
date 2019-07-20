@@ -11,7 +11,7 @@ void usage() {
 
 int main(int argc, char* argv[]) {
 #ifdef DEBUG
-  char dev[] = "ens33";
+  char dev[] = "dum0";
 #else
     if (argc != 2) {
       usage();
